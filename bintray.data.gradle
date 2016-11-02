@@ -1,0 +1,23 @@
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'ADBTestRule'
+
+    publishedGroupId = 'com.rzagorski'
+    libraryName = 'ADBTestRule'
+    artifact = 'adbtestrule'
+
+    libraryDescription = 'Helper JUnit test rule to execute ADB (Android Debug Bridge) commands before and after each test.'
+
+    siteUrl = 'https://github.com/RobertZagorski/ADBTestRule'
+    gitUrl = 'https://github.com/RobertZagorski/ADBTestRule.git'
+
+    libraryVersion = '0.0.1'
+
+    developerId = 'RobertZagorski'
+    developerName = 'Robert Zagórski'
+    developerEmail = ''
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
