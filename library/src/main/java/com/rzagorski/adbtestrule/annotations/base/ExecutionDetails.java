@@ -1,5 +1,7 @@
 package com.rzagorski.adbtestrule.annotations.base;
 
+import com.rzagorski.adbtestrule.commands.ADBCommand;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
@@ -14,5 +16,5 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface ExecutionDetails {
 
-    Class<?> executionClass();
+    Class<? extends ADBCommand> executionClass();
 }

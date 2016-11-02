@@ -20,7 +20,7 @@ import java.util.Collection;
  * Created by Robert Zagórski on 2016-10-25.
  */
 
-public class ADBTestRule<V extends ADBCommand> implements TestRule {
+public class ADBTestRule implements TestRule {
 
     @SuppressLint("NewApi")
     @SuppressWarnings("unchecked")
@@ -43,11 +43,11 @@ public class ADBTestRule<V extends ADBCommand> implements TestRule {
                 continue;
             }
             ExecutionDetails executionDetailsAnnotation = annotationClass.getAnnotation(ExecutionDetails.class);
-            Class<?> commandClass = executionDetailsAnnotation.executionClass();
-            V instance;
+            Class<? extends ADBCommand> commandClass = executionDetailsAnnotation.executionClass();
+            ADBCommand instance;
             try {
                 Constructor commandClassConstructor = commandClass.getConstructor(annotationClass);
-                instance = (V) commandClassConstructor.newInstance(testMethodAnnotation);
+                instance = (ADBCommand) commandClassConstructor.newInstance(testMethodAnnotation);
             } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
                 e.printStackTrace();
                 throw new RuntimeException("Unable to execute adb command:" + executionDetailsAnnotation.executionClass().getSimpleName(), e);
