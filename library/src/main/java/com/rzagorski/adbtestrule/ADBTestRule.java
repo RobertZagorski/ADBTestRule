@@ -13,7 +13,9 @@ import org.junit.runners.model.Statement;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -30,6 +32,7 @@ public class ADBTestRule implements TestRule {
         if (testMethodAnnotations == null || testMethodAnnotations.size() == 0) {
             return evaluate(base);
         }
+        List<ADBCommand> commandList = new ArrayList<>();
         for (Annotation testMethodAnnotation : testMethodAnnotations) {
             if (testMethodAnnotation == null) {
                 continue;
@@ -52,9 +55,13 @@ public class ADBTestRule implements TestRule {
                 e.printStackTrace();
                 throw new RuntimeException("Unable to execute adb command:" + executionDetailsAnnotation.executionClass().getSimpleName(), e);
             }
-            return new ADBStatement(instance, base);
+            commandList.add(instance);
         }
-        return evaluate(base);
+        if (commandList.size() == 0) {
+            return evaluate(base);
+        } else {
+            return new ADBStatement(commandList, base);
+        }
     }
 
     public Statement evaluate(final Statement base) {
@@ -68,17 +75,19 @@ public class ADBTestRule implements TestRule {
 
     private class ADBStatement extends Statement {
         private final Statement mBase;
-        private final ADBCommand command;
+        private final List<ADBCommand> commandList;
 
-        public ADBStatement(ADBCommand command, Statement mBase) {
-            this.command = command;
+        public ADBStatement(List<ADBCommand> commands, Statement mBase) {
+            this.commandList = commands;
             this.mBase = mBase;
         }
 
         @Override
         public void evaluate() throws Throwable {
             try {
-                command.execute();
+                for (ADBCommand command : commandList) {
+                    command.execute();
+                }
                 mBase.evaluate();
             } finally {
                 //TODO command.revert();
